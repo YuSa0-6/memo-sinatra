@@ -8,6 +8,6 @@ def all
   File.open(FILE_PATH) { |file| JSON.parse(file.read) }
 end
 
-def create(memos)
+def save(memos)
   File.open(FILE_PATH, 'w') { |file| JSON.dump(memos, file) }
 end

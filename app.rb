@@ -40,7 +40,12 @@ post '/memos' do
   content = h(params[:content])
 
   memos = all
-  id = (memos.keys.map(&:to_i).max + 1).to_s
+  first_id = 1
+  id = if memos.keys.map(&:to_i).max.nil?
+         first_id
+       else
+         (memos.keys.map(&:to_i).max + 1).to_s
+       end
   memos[id] = { 'title' => title, 'content' => content }
   save(memos)
 
