@@ -6,12 +6,6 @@ require 'json'
 require 'cgi'
 require_relative 'models/memo'
 
-helpers do
-  def h(text)
-    Rack::Utils.escape_html(text)
-  end
-end
-
 get '/' do
   redirect '/memos'
 end
@@ -36,15 +30,15 @@ get '/memos/:id' do
 end
 
 post '/memos' do
-  title = h(params[:title])
-  content = h(params[:content])
+  title = params[:title]
+  content = params[:content]
 
   memos = all
   first_id = 1
-  id = if memos.keys.map(&:to_i).max.nil?
+  id = if memos.empty?
          first_id
        else
-         (memos.keys.map(&:to_i).max + 1).to_s
+         memos.keys.map(&:to_i).max + 1
        end
   memos[id] = { 'title' => title, 'content' => content }
   save(memos)
@@ -54,8 +48,8 @@ end
 
 get '/memos/:id/edit' do
   memos = all
-  @title = h(memos[params[:id]]['title'])
-  @content = h(memos[params[:id]]['content'])
+  @title = memos[params[:id]]['title']
+  @content = memos[params[:id]]['content']
   @page_title = 'Edit page'
   erb :edit
 end
