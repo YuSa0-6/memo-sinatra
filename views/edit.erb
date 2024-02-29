@@ -2,7 +2,7 @@
   <form action="/memos/<%= params[:id] %>" method="post">
     <div>
       <label for="title">Title</label>
-      <input type="text" id="title" name="title" value="<%= CGI.escapeHTML(@title) %>">
+      <input type="text" id="title" name="title" value="<%= (@title) %>">
     </div>
     <div>
       <label for="content">Content</label>
