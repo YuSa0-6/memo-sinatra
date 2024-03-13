@@ -1,0 +1,12 @@
+<main>
+  <button onclick="location.href='/memos/new'">Add memo</button>
+  <ul>
+    <% @memos.each do |id, memo| %>
+      <li>
+        <a href='/memos/<%= id %>'>
+          <%= CGI.escapeHTML(memo["title"]) %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+</main>
