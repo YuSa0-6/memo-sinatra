@@ -2,12 +2,17 @@
 
 require 'json'
 require 'sinatra/reloader' if development?
-FILE_PATH = 'storage/data.json'
+require 'pg'
 
-def all
-  File.open(FILE_PATH) { |file| JSON.parse(file.read) }
+def connection
+  @connection ||= PG.connect(dbname: 'memosdb')
 end
 
-def save(memos)
-  File.open(FILE_PATH, 'w') { |file| JSON.dump(memos, file) }
+configure do
+  result = connection.exec("SELECT * FROM information_schema.tables WHERE table_name = 'memos'")
+  connection.exec('CREATE TABLE memos (id serial, title varchar(255), content text)') if result.values.empty?
+end
+
+def all
+  connection.exec('SELECT * FROM memos')
 end
