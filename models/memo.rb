@@ -16,3 +16,12 @@ end
 def all
   connection.exec('SELECT * FROM memos')
 end
+
+def show(id)
+  result = connection.exec_params('SELECT * FROM memos WHERE id = $1;', [id])
+  result.tuple_value(0)
+end
+
+def save(title, content)
+  connection.exec("INSERT INTO memos(title, content) VALUES ('#{title}','#{content}')")
+end

@@ -22,9 +22,9 @@ get '/memos/new' do
 end
 
 get '/memos/:id' do
-  memos = all
-  @title = memos[params[:id]]['title']
-  @content = memos[params[:id]]['content']
+  memo = show(params[:id])
+  @title = memo[1]
+  @content = memo[2]
   @page_title = 'Show page'
   erb :show
 end
