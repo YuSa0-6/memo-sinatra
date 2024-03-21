@@ -19,9 +19,9 @@ end
 
 def show(id)
   result = connection.exec_params('SELECT * FROM memos WHERE id = $1;', [id])
-  result.tuple_value(0)
+  result.tuple_values(0)
 end
 
 def save(title, content)
-  connection.exec("INSERT INTO memos(title, content) VALUES ('#{title}','#{content}')")
+  connection.exec_params('INSERT INTO memos(title, content) VALUES ($1, $2);', [title, content])
 end

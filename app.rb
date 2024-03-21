@@ -32,17 +32,7 @@ end
 post '/memos' do
   title = params[:title]
   content = params[:content]
-
-  memos = all
-  first_id = 1
-  id = if memos.empty?
-         first_id
-       else
-         memos.keys.map(&:to_i).max + 1
-       end
-  memos[id] = { 'title' => title, 'content' => content }
-  save(memos)
-
+  save(title, content)
   redirect '/memos'
 end
 
