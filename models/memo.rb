@@ -29,3 +29,7 @@ end
 def edit(title, content, id)
   connection.exec_params('UPDATE memos SET title = $1, content = $2 WHERE id = $3;', [title, content, id])
 end
+
+def delete(id)
+  connection.exec_params('DELETE FROM memos WHERE id = $1;', [id])
+end

@@ -52,10 +52,7 @@ patch '/memos/:id' do
 end
 
 delete '/memos/:id' do
-  memos = all
-  memos.delete(params[:id])
-  save(memos)
-
+  delete(params[:id])
   redirect '/memos'
 end
 not_found do
