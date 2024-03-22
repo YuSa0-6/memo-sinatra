@@ -37,9 +37,9 @@ post '/memos' do
 end
 
 get '/memos/:id/edit' do
-  memos = all
-  @title = memos[params[:id]]['title']
-  @content = memos[params[:id]]['content']
+  memo = show(params[:id])
+  @title = memo[1]
+  @content = memo[2]
   @page_title = 'Edit page'
   erb :edit
 end
@@ -47,11 +47,7 @@ end
 patch '/memos/:id' do
   title = params[:title]
   content = params[:content]
-
-  memos = all
-  memos[params[:id]] = { 'title' => title, 'content' => content }
-  save(memos)
-
+  edit(title, content, params[:id])
   redirect "/memos/#{params[:id]}"
 end
 
