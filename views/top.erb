@@ -1,9 +1,9 @@
 <main>
   <button onclick="location.href='/memos/new'">Add memo</button>
   <ul>
-    <% @memos.each do |id, memo| %>
+    <% @memos.each do |memo| %>
       <li>
-        <a href='/memos/<%= id %>'>
+        <a href="/memos/<%= memo["id"] %>">
           <%= CGI.escapeHTML(memo["title"]) %>
         </a>
       </li>

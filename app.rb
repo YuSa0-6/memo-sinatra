@@ -22,9 +22,9 @@ get '/memos/new' do
 end
 
 get '/memos/:id' do
-  memos = all
-  @title = memos[params[:id]]['title']
-  @content = memos[params[:id]]['content']
+  memo = show(params[:id])
+  @title = memo[:title]
+  @content = memo[:content]
   @page_title = 'Show page'
   erb :show
 end
@@ -32,24 +32,14 @@ end
 post '/memos' do
   title = params[:title]
   content = params[:content]
-
-  memos = all
-  first_id = 1
-  id = if memos.empty?
-         first_id
-       else
-         memos.keys.map(&:to_i).max + 1
-       end
-  memos[id] = { 'title' => title, 'content' => content }
-  save(memos)
-
+  create(title, content)
   redirect '/memos'
 end
 
 get '/memos/:id/edit' do
-  memos = all
-  @title = memos[params[:id]]['title']
-  @content = memos[params[:id]]['content']
+  memo = show(params[:id])
+  @title = memo[:title]
+  @content = memo[:content]
   @page_title = 'Edit page'
   erb :edit
 end
@@ -57,21 +47,15 @@ end
 patch '/memos/:id' do
   title = params[:title]
   content = params[:content]
-
-  memos = all
-  memos[params[:id]] = { 'title' => title, 'content' => content }
-  save(memos)
-
+  update(title, content, params[:id])
   redirect "/memos/#{params[:id]}"
 end
 
 delete '/memos/:id' do
-  memos = all
-  memos.delete(params[:id])
-  save(memos)
-
+  delete(params[:id])
   redirect '/memos'
 end
+
 not_found do
   'This is nowhere to be found'
 end

@@ -2,12 +2,35 @@
 
 require 'json'
 require 'sinatra/reloader' if development?
-FILE_PATH = 'storage/data.json'
+require 'pg'
 
-def all
-  File.open(FILE_PATH) { |file| JSON.parse(file.read) }
+def connection
+  @connection ||= PG.connect(dbname: 'memosdb')
 end
 
-def save(memos)
-  File.open(FILE_PATH, 'w') { |file| JSON.dump(memos, file) }
+configure do
+  result = connection.exec("SELECT * FROM information_schema.tables WHERE table_name = 'memos'")
+  connection.exec('CREATE TABLE memos (id serial, title varchar(255), content text)') if result.values.empty?
+end
+
+def all
+  connection.exec('SELECT * FROM memos')
+end
+
+def show(id)
+  result = connection.exec_params('SELECT * FROM memos WHERE id = $1;', [id])
+  result.tuple_values(0)
+  { id: result.tuple_values(0), title: result.tuple_values(1), content: result.tuple_values(2) }
+end
+
+def create(title, content)
+  connection.exec_params('INSERT INTO memos(title, content) VALUES ($1, $2);', [title, content])
+end
+
+def update(title, content, id)
+  connection.exec_params('UPDATE memos SET title = $1, content = $2 WHERE id = $3;', [title, content, id])
+end
+
+def delete(id)
+  connection.exec_params('DELETE FROM memos WHERE id = $1;', [id])
 end
