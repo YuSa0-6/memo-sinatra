@@ -20,13 +20,14 @@ end
 def show(id)
   result = connection.exec_params('SELECT * FROM memos WHERE id = $1;', [id])
   result.tuple_values(0)
+  { id: result.tuple_values(0), title: result.tuple_values(1), content: result.tuple_values(2) }
 end
 
-def save(title, content)
+def create(title, content)
   connection.exec_params('INSERT INTO memos(title, content) VALUES ($1, $2);', [title, content])
 end
 
-def edit(title, content, id)
+def update(title, content, id)
   connection.exec_params('UPDATE memos SET title = $1, content = $2 WHERE id = $3;', [title, content, id])
 end
 

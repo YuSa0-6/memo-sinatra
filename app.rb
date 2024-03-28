@@ -23,8 +23,8 @@ end
 
 get '/memos/:id' do
   memo = show(params[:id])
-  @title = memo[1]
-  @content = memo[2]
+  @title = memo[:title]
+  @content = memo[:content]
   @page_title = 'Show page'
   erb :show
 end
@@ -32,14 +32,14 @@ end
 post '/memos' do
   title = params[:title]
   content = params[:content]
-  save(title, content)
+  create(title, content)
   redirect '/memos'
 end
 
 get '/memos/:id/edit' do
   memo = show(params[:id])
-  @title = memo[1]
-  @content = memo[2]
+  @title = memo[:title]
+  @content = memo[:content]
   @page_title = 'Edit page'
   erb :edit
 end
@@ -47,7 +47,7 @@ end
 patch '/memos/:id' do
   title = params[:title]
   content = params[:content]
-  edit(title, content, params[:id])
+  update(title, content, params[:id])
   redirect "/memos/#{params[:id]}"
 end
 
@@ -55,6 +55,7 @@ delete '/memos/:id' do
   delete(params[:id])
   redirect '/memos'
 end
+
 not_found do
   'This is nowhere to be found'
 end
